@@ -1,0 +1,355 @@
+
+-- Z's Instant Blocker 😈
+-- LocalScript for Roblox Studio
+
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+local old = playerGui:FindFirstChild("ZInstantBlocker")
+if old then old:Destroy() end
+
+local BLACK = Color3.fromRGB(8, 8, 11)
+local DARK = Color3.fromRGB(24, 18, 23)
+local RED = Color3.fromRGB(255, 30, 50)
+local WHITE = Color3.fromRGB(245, 245, 245)
+local MUTED = Color3.fromRGB(165, 155, 165)
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "ZInstantBlocker"
+gui.ResetOnSpawn = false
+gui.Parent = playerGui
+
+-- INTRO SCREEN
+local intro = Instance.new("Frame")
+intro.Size = UDim2.fromScale(1, 1)
+intro.BackgroundColor3 = BLACK
+intro.BorderSizePixel = 0
+intro.ZIndex = 20
+intro.Parent = gui
+
+local emoji = Instance.new("TextLabel")
+emoji.Size = UDim2.new(1, 0, 0, 70)
+emoji.Position = UDim2.new(0, 0, 0.32, 0)
+emoji.BackgroundTransparency = 1
+emoji.Text = "🫩"
+emoji.TextSize = 52
+emoji.ZIndex = 21
+emoji.Parent = intro
+
+local introTitle = Instance.new("TextLabel")
+introTitle.Size = UDim2.new(1, -20, 0, 48)
+introTitle.Position = UDim2.new(0, 10, 0.32, 72)
+introTitle.BackgroundTransparency = 1
+introTitle.Text = "Ɓeşṭ insṭant ɓlocker"
+introTitle.TextColor3 = RED
+introTitle.TextSize = 24
+introTitle.Font = Enum.Font.GothamBold
+introTitle.ZIndex = 21
+introTitle.Parent = intro
+
+local introStroke = Instance.new("UIStroke")
+introStroke.Color = RED
+introStroke.Thickness = 1
+introStroke.Parent = introTitle
+
+local barBack = Instance.new("Frame")
+barBack.Size = UDim2.fromOffset(200, 4)
+barBack.Position = UDim2.new(0.5, -100, 0.32, 130)
+barBack.BackgroundColor3 = DARK
+barBack.BorderSizePixel = 0
+barBack.ZIndex = 21
+barBack.Parent = intro
+
+local bar = Instance.new("Frame")
+bar.Size = UDim2.new(0, 0, 1, 0)
+bar.BackgroundColor3 = RED
+bar.BorderSizePixel = 0
+bar.ZIndex = 22
+bar.Parent = barBack
+
+-- Add an authorized Roblox audio asset ID here.
+local music = Instance.new("Sound")
+music.Name = "IntroPhonk"
+music.SoundId = "rbxassetid://0"
+music.Volume = 0.6
+music.Looped = false
+music.Parent = gui
+
+-- Replace 0 above with your permitted audio asset ID.
+if music.SoundId ~= "rbxassetid://0" then
+    music:Play()
+end
+
+TweenService:Create(
+    bar,
+    TweenInfo.new(2.5),
+    {Size = UDim2.new(1, 0, 1, 0)}
+):Play()
+
+task.wait(2.5)
+intro:Destroy()
+
+-- MAIN PANEL
+local frame = Instance.new("Frame")
+frame.Name = "Main"
+frame.Size = UDim2.fromOffset(280, 360)
+frame.Position = UDim2.new(1, -295, 0.5, -180)
+frame.BackgroundColor3 = BLACK
+frame.BorderSizePixel = 0
+frame.Parent = gui
+
+Instance.new("UICorner", frame).CornerRadius =
+    UDim.new(0, 12)
+
+local outline = Instance.new("UIStroke")
+outline.Color = RED
+outline.Thickness = 1.5
+outline.Parent = frame
+
+-- HEADER
+local header = Instance.new("Frame")
+header.Size = UDim2.new(1, 0, 0, 44)
+header.BackgroundColor3 = DARK
+header.BorderSizePixel = 0
+header.Parent = frame
+
+Instance.new("UICorner", header).CornerRadius =
+    UDim.new(0, 12)
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, -48, 1, 0)
+title.Position = UDim2.fromOffset(10, 0)
+title.BackgroundTransparency = 1
+title.Text = "Z's Instant Blocker 😈"
+title.TextColor3 = RED
+title.Font = Enum.Font.GothamBold
+title.TextSize = 15
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Parent = header
+
+local close = Instance.new("TextButton")
+close.Size = UDim2.fromOffset(30, 30)
+close.Position = UDim2.new(1, -36, 0, 7)
+close.BackgroundColor3 = Color3.fromRGB(90, 15, 25)
+close.Text = "X"
+close.TextColor3 = WHITE
+close.Font = Enum.Font.GothamBold
+close.TextSize = 14
+close.Parent = header
+
+Instance.new("UICorner", close).CornerRadius =
+    UDim.new(0, 7)
+
+close.Activated:Connect(function()
+    gui:Destroy()
+end)
+
+-- EXECUTING PLAYER PROFILE
+local profile = Instance.new("ImageLabel")
+profile.Size = UDim2.fromOffset(34, 34)
+profile.Position = UDim2.fromOffset(12, 51)
+profile.BackgroundColor3 = DARK
+profile.BorderSizePixel = 0
+profile.Parent = frame
+
+Instance.new("UICorner", profile).CornerRadius =
+    UDim.new(1, 0)
+
+local profileName = Instance.new("TextLabel")
+profileName.Position = UDim2.fromOffset(54, 51)
+profileName.Size = UDim2.new(1, -65, 0, 34)
+profileName.BackgroundTransparency = 1
+profileName.Text = player.DisplayName .. " (@" .. player.Name .. ")"
+profileName.TextColor3 = WHITE
+profileName.Font = Enum.Font.GothamMedium
+profileName.TextSize = 12
+profileName.TextXAlignment = Enum.TextXAlignment.Left
+profileName.TextTruncate = Enum.TextTruncate.AtEnd
+profileName.Parent = frame
+
+task.spawn(function()
+    local ok, image = pcall(function()
+        return Players:GetUserThumbnailAsync(
+            player.UserId,
+            Enum.ThumbnailType.HeadShot,
+            Enum.ThumbnailSize.Size100x100
+        )
+    end)
+
+    if ok and profile.Parent then
+        profile.Image = image
+    end
+end)
+
+local divider = Instance.new("Frame")
+divider.Position = UDim2.fromOffset(10, 92)
+divider.Size = UDim2.new(1, -20, 0, 1)
+divider.BackgroundColor3 = RED
+divider.BorderSizePixel = 0
+divider.Parent = frame
+
+local subtitle = Instance.new("TextLabel")
+subtitle.Position = UDim2.fromOffset(12, 98)
+subtitle.Size = UDim2.new(1, -24, 0, 22)
+subtitle.BackgroundTransparency = 1
+subtitle.Text = "PLAYERS IN SERVER"
+subtitle.TextColor3 = MUTED
+subtitle.Font = Enum.Font.GothamBold
+subtitle.TextSize = 11
+subtitle.TextXAlignment = Enum.TextXAlignment.Left
+subtitle.Parent = frame
+
+local list = Instance.new("ScrollingFrame")
+list.Name = "PlayerList"
+list.Position = UDim2.fromOffset(10, 124)
+list.Size = UDim2.new(1, -20, 1, -134)
+list.BackgroundTransparency = 1
+list.BorderSizePixel = 0
+list.ScrollBarThickness = 3
+list.ScrollBarImageColor3 = RED
+list.AutomaticCanvasSize = Enum.AutomaticSize.Y
+list.CanvasSize = UDim2.new(0, 0, 0, 0)
+list.Parent = frame
+
+local layout = Instance.new("UIListLayout")
+layout.Padding = UDim.new(0, 7)
+layout.SortOrder = Enum.SortOrder.LayoutOrder
+layout.Parent = list
+
+-- PLAYER ENTRIES
+local function addPlayer(target)
+    if target == player then return end
+
+    local entryName = "Player_" .. target.UserId
+    if list:FindFirstChild(entryName) then return end
+
+    local entry = Instance.new("Frame")
+    entry.Name = entryName
+    entry.Size = UDim2.new(1, -6, 0, 62)
+    entry.BackgroundColor3 = DARK
+    entry.BorderSizePixel = 0
+    entry.Parent = list
+
+    Instance.new("UICorner", entry).CornerRadius =
+        UDim.new(0, 8)
+
+    local avatar = Instance.new("ImageLabel")
+    avatar.Size = UDim2.fromOffset(42, 42)
+    avatar.Position = UDim2.fromOffset(7, 10)
+    avatar.BackgroundColor3 = BLACK
+    avatar.BorderSizePixel = 0
+    avatar.Parent = entry
+
+    Instance.new("UICorner", avatar).CornerRadius =
+        UDim.new(1, 0)
+
+    task.spawn(function()
+        local ok, image = pcall(function()
+            return Players:GetUserThumbnailAsync(
+                target.UserId,
+                Enum.ThumbnailType.HeadShot,
+                Enum.ThumbnailSize.Size100x100
+            )
+        end)
+
+        if ok and avatar.Parent then
+            avatar.Image = image
+        end
+    end)
+
+    local name = Instance.new("TextLabel")
+    name.Position = UDim2.fromOffset(56, 4)
+    name.Size = UDim2.new(1, -62, 0, 22)
+    name.BackgroundTransparency = 1
+    name.Text = target.Name
+    name.TextColor3 = WHITE
+    name.Font = Enum.Font.GothamMedium
+    name.TextSize = 12
+    name.TextXAlignment = Enum.TextXAlignment.Left
+    name.TextTruncate = Enum.TextTruncate.AtEnd
+    name.Parent = entry
+
+    local block = Instance.new("TextButton")
+    block.Position = UDim2.fromOffset(56, 29)
+    block.Size = UDim2.new(1, -62, 0, 26)
+    block.BackgroundColor3 = Color3.fromRGB(190, 20, 40)
+    block.Text = "INSTANT BLOCK"
+    block.TextColor3 = WHITE
+    block.Font = Enum.Font.GothamBold
+    block.TextSize = 11
+    block.BorderSizePixel = 0
+    block.Parent = entry
+
+    Instance.new("UICorner", block).CornerRadius =
+        UDim.new(0, 6)
+
+    block.Activated:Connect(function()
+        if target.Parent ~= Players then return end
+
+        local ok, err = pcall(function()
+            StarterGui:SetCore("PromptBlockPlayer", target)
+        end)
+
+        if not ok then
+            warn("Roblox block prompt unavailable: " .. tostring(err))
+        end
+    end)
+end
+
+local function removePlayer(target)
+    local entry = list:FindFirstChild("Player_" .. target.UserId)
+    if entry then entry:Destroy() end
+end
+
+for _, target in ipairs(Players:GetPlayers()) do
+    addPlayer(target)
+end
+
+Players.PlayerAdded:Connect(addPlayer)
+Players.PlayerRemoving:Connect(removePlayer)
+
+-- DRAG PANEL: mouse and touch
+local dragging = false
+local dragStart
+local startPosition
+local dragInput
+
+header.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+        or input.UserInputType == Enum.UserInputType.Touch then
+
+        dragging = true
+        dragStart = input.Position
+        startPosition = frame.Position
+        dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (
+        input.UserInputType == Enum.UserInputType.MouseMovement
+        or input.UserInputType == Enum.UserInputType.Touch
+    ) then
+        local delta = input.Position - dragStart
+
+        frame.Position = UDim2.new(
+            startPosition.X.Scale,
+            startPosition.X.Offset + delta.X,
+            startPosition.Y.Scale,
+            startPosition.Y.Offset + delta.Y
+        )
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input == dragInput
+        or input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+        dragInput = nil
+    end
+end)
